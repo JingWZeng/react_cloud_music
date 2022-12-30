@@ -5,7 +5,7 @@ import { Top, Tab, TabItem } from './style';
 
 function Home(props) {
   const activeStyle = {
-    backgroundColor: 'crimson',
+    fontSize: 18,
   };
 
   return (

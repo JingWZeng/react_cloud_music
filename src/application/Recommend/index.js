@@ -3,6 +3,9 @@ import { map } from 'lodash';
 
 import Slider from '../../components/slider';
 import RecommendList from '../../components/list';
+import Scroll from '../../components/scroll';
+
+import { Wrapper } from './style';
 
 function Recommend(props) {
   const bannerList = map([1, 2, 3, 4], (item) => {
@@ -22,10 +25,14 @@ function Recommend(props) {
     };
   });
   return (
-    <>
-      <Slider bannerList={bannerList}></Slider>
-      <RecommendList recommendList={recommendList}></RecommendList>
-    </>
+    <Wrapper>
+      <Scroll className="list">
+        <div>
+          <Slider bannerList={bannerList}></Slider>
+          <RecommendList recommendList={recommendList}></RecommendList>
+        </div>
+      </Scroll>
+    </Wrapper>
   );
 }
 
