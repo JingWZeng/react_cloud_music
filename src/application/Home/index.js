@@ -4,6 +4,10 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { Top, Tab, TabItem } from './style';
 
 function Home(props) {
+  const activeStyle = {
+    backgroundColor: 'crimson',
+  };
+
   return (
     <>
       <Top>
@@ -12,17 +16,26 @@ function Home(props) {
         <span className="iconfont search">&#xe62b;</span>
       </Top>
       <Tab>
-        <NavLink to="/recommend" activeClassName="selected">
+        <NavLink
+          to="/recommend"
+          style={({ isActive }) => (isActive ? activeStyle : undefined)}
+        >
           <TabItem>
             <span> 推荐 </span>
           </TabItem>
         </NavLink>
-        <NavLink to="/singers" activeClassName="selected">
+        <NavLink
+          to="/singers"
+          style={({ isActive }) => (isActive ? activeStyle : undefined)}
+        >
           <TabItem>
             <span> 歌手 </span>
           </TabItem>
         </NavLink>
-        <NavLink to="/rank" activeClassName="selected">
+        <NavLink
+          to="/rank"
+          style={({ isActive }) => (isActive ? activeStyle : undefined)}
+        >
           <TabItem>
             <span> 排行榜 </span>
           </TabItem>
