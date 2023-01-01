@@ -7,6 +7,7 @@ import {
 const initialState = {
   bannerList: [],
   recommendList: [],
+  enterLoading: true,
 };
 
 export const recommendSlice = createSlice({
@@ -19,10 +20,14 @@ export const recommendSlice = createSlice({
     changeRecommendList(state, { payload }) {
       state.recommendList = payload;
     },
+    changeEnterLoading(state, { payload }) {
+      state.enterLoading = payload;
+    },
   },
 });
 
-export const { changeBannerList, changeRecommendList } = recommendSlice.actions;
+export const { changeBannerList, changeRecommendList, changeEnterLoading } =
+  recommendSlice.actions;
 
 export const getBannerList = () => (dispatch) => {
   getBannerRequest()
@@ -38,6 +43,7 @@ export const getRecommendList = () => (dispatch) => {
   getRecommendListRequest()
     .then((data) => {
       dispatch(changeRecommendList(data.result));
+      dispatch(changeEnterLoading(false));
     })
     .catch((error) => {
       console.log(error);

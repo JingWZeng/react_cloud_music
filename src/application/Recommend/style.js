@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
+export const Content = styled.div`
   position: fixed;
   top: 90px;
   bottom: 0;

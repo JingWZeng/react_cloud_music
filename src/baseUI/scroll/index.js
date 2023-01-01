@@ -19,6 +19,7 @@ const Scroll = forwardRef((props, ref) => {
   const {
     direction,
     refresh,
+    click,
     pullUpLoading,
     pullDownLoading,
     bounceTop,
@@ -34,7 +35,9 @@ const Scroll = forwardRef((props, ref) => {
     const scroll = new BScroll(scrollContainerRef.current, {
       scrollX: direction === 'horizontal',
       scrollY: direction === 'vertical',
-      propTypes: 3,
+      probeType: 3,
+      mouseWheel: true,
+      click,
       bounce: {
         top: bounceTop,
         bottom: bounceBottom,
@@ -47,20 +50,11 @@ const Scroll = forwardRef((props, ref) => {
     };
   }, []);
 
-  // useEffect不传第二个参数，componentDidMount + componentDidUpdate
-  useEffect(() => {
-    // 每次重新渲染都要刷新实例，防止无法滑动:
-    if (refresh && bScroll) {
-      bScroll.refresh();
-    }
-  });
-
   useEffect(() => {
     if (!bScroll || !onScroll) return;
     bScroll.on('scroll', (scroll) => {
-      onScroll(scroll); // 正在滚动事件
+      onScroll(scroll);
     });
-
     return () => {
       bScroll.off('scroll');
     };
@@ -68,7 +62,7 @@ const Scroll = forwardRef((props, ref) => {
 
   // 上拉到底判断,调用上拉刷新的函数
   useEffect(() => {
-    if (!bScroll || !onScroll) return;
+    if (!bScroll || !pullUp) return;
     bScroll.on('scrollEnd', () => {
       // 判断是否滑动到了底部
       if (bScroll.y <= bScroll.maxScrollY + 100) {
@@ -94,6 +88,14 @@ const Scroll = forwardRef((props, ref) => {
     };
   }, [pullDown, bScroll]);
 
+  // useEffect不传第二个参数，componentDidMount + componentDidUpdate
+  useEffect(() => {
+    // 每次重新渲染都要刷新实例，防止无法滑动:
+    if (refresh && bScroll) {
+      bScroll.refresh();
+    }
+  });
+
   useImperativeHandle(ref, () => ({
     refresh() {
       if (bScroll) {
@@ -115,7 +117,7 @@ const Scroll = forwardRef((props, ref) => {
 
 Scroll.propTypes = {
   direction: PropTypes.oneOf(['vertical', 'horizontal']), // 滚动的方向
-  // click: true, // 是否支持点击
+  click: PropTypes.bool, // 是否支持点击
   refresh: PropTypes.bool, // 是否刷新
   onScroll: PropTypes.func, // 滑动触发的回调函数
   pullUp: PropTypes.func, // 上拉加载逻辑
@@ -128,7 +130,7 @@ Scroll.propTypes = {
 
 Scroll.defaultProps = {
   direction: 'vertical',
-  // click: true,
+  click: true,
   refresh: true,
   onScroll: null,
   pullUpLoading: false,

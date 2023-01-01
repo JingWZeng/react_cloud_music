@@ -1,38 +1,44 @@
 import React, { useEffect, useRef } from 'react';
-import { map } from 'lodash';
-import { Provider, useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { forceCheck } from 'react-lazyload';
 
 import Slider from '../../components/slider';
 import RecommendList from '../../components/list';
-import Scroll from '../../components/scroll';
+import Scroll from '../../baseUI/scroll';
 
 import {
   getBannerList,
   getRecommendList,
 } from '../../store/features/recommend/recommendSlice';
 
-import { Wrapper } from './style';
+import { Content } from './style';
+import Loading from '../../baseUI/loading';
 
 function Recommend(props) {
-  const scrollRef = useRef();
-
-  const { bannerList, recommendList } = useSelector((state) => state.recommend);
+  const { bannerList, recommendList, enterLoading } = useSelector(
+    (state) => state.recommend
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getBannerList());
-    dispatch(getRecommendList());
+    if (!bannerList.length) {
+      dispatch(getBannerList());
+    }
+    if (!recommendList.length) {
+      dispatch(getRecommendList());
+    }
   }, []);
 
   return (
-    <Wrapper>
-      <Scroll className="list" ref={scrollRef}>
+    <Content>
+      <Scroll className="list" onScroll={forceCheck}>
         <div>
           <Slider bannerList={bannerList}></Slider>
           <RecommendList recommendList={recommendList}></RecommendList>
         </div>
       </Scroll>
-    </Wrapper>
+      {enterLoading ? <Loading /> : null}
+    </Content>
   );
 }
 
