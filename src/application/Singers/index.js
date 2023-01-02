@@ -3,6 +3,7 @@ import HorizontalItem from '../../baseUI/horizontalItem';
 import { map } from 'lodash';
 import LazyLoad, { forceCheck } from 'react-lazyload';
 import { useDispatch, useSelector } from 'react-redux';
+import { useUpdateEffect } from 'ahooks';
 
 import { alphaTypes, singerTypes, singerAreaTypes } from '../../api/config';
 import { NavContainer, ListContainer, List, ListItem } from './style';
@@ -39,10 +40,13 @@ function Singers(props) {
   const isHot = singerType === '' && singerArea === '' && alpha === '';
 
   useEffect(() => {
-    dispatch(getHotSingerList());
+    if (!singerList.length) {
+      dispatch(getHotSingerList());
+    }
   }, []);
 
-  useEffect(() => {
+  useUpdateEffect(() => {
+    //  首次渲染不执行
     updateDispatch();
   }, [singerType, singerArea, alpha]);
 
