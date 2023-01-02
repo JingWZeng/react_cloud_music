@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import HorizontalItem from '../../baseUI/horizontalItem';
 import { map } from 'lodash';
+import LazyLoad, { forceCheck } from 'react-lazyload';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { alphaTypes, singerTypes, singerAreaTypes } from '../../api/config';
 import { NavContainer, ListContainer, List, ListItem } from './style';
@@ -11,25 +13,28 @@ import {
   refreshMoreHotSingerList,
   refreshMoreSingerList,
 } from '../../store/features/singers/requestAction';
-import { useDispatch, useSelector } from 'react-redux';
-import { forceCheck } from 'react-lazyload';
 import {
   changeEnterLoading,
   changePageCount,
   changePullDownLoading,
   changePullUpLoading,
 } from '../../store/features/singers/singersSlice';
+import Loading from '../../baseUI/loading';
 
 function Singers(props) {
   const [singerArea, setSingerArea] = useState('');
   const [singerType, setSingerType] = useState('');
   const [alpha, setAlpha] = useState('');
 
-  const { pageCount, singerList, pullUpLoading, pullDownLoading } = useSelector(
-    (state) => state.singers
-  );
   const dispatch = useDispatch();
 
+  const {
+    pageCount,
+    singerList,
+    enterLoading,
+    pullUpLoading,
+    pullDownLoading,
+  } = useSelector((state) => state.singers);
   // 没有选择任何条件的时候调试热门歌手接口
   const isHot = singerType === '' && singerArea === '' && alpha === '';
 
@@ -37,19 +42,20 @@ function Singers(props) {
     dispatch(getHotSingerList());
   }, []);
 
-  const handleUpdateSingerArea = (area) => {
-    setSingerArea(area);
+  useEffect(() => {
     updateDispatch();
-  };
+  }, [singerType, singerArea, alpha]);
 
   const handleUpdateSingerType = (type) => {
     setSingerType(type);
-    updateDispatch();
+  };
+
+  const handleUpdateSingerArea = (area) => {
+    setSingerArea(area);
   };
 
   const handleUpdateAlpha = (alpha) => {
     setAlpha(alpha);
-    updateDispatch();
   };
 
   const handlePullUp = () => {
@@ -64,6 +70,7 @@ function Singers(props) {
   const updateDispatch = () => {
     dispatch(changePageCount(0));
     dispatch(changeEnterLoading(true));
+
     dispatch(
       getSingerList({
         type: singerType,
@@ -116,12 +123,23 @@ function Singers(props) {
           return (
             <ListItem key={singer.accountId + '' + index}>
               <div className="img_wrapper">
-                <img
-                  src={`${singer.picUrl}?param=300x300`}
-                  width="100%"
-                  height="100%"
-                  alt="music"
-                />
+                <LazyLoad
+                  placeholder={
+                    <img
+                      width="100%"
+                      height="100%"
+                      src={require('./singer.png')}
+                      alt="default-music"
+                    />
+                  }
+                >
+                  <img
+                    src={`${singer.picUrl}?param=300x300`}
+                    width="100%"
+                    height="100%"
+                    alt="music"
+                  />
+                </LazyLoad>
               </div>
               <span className="name">{singer.name}</span>
             </ListItem>
@@ -154,6 +172,7 @@ function Singers(props) {
         />
       </NavContainer>
       <ListContainer>
+        {enterLoading ? <Loading /> : null}
         <Scroll
           onScroll={forceCheck}
           pullDown={handlePullDown}

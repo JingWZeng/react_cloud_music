@@ -35,28 +35,28 @@ export const singersSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // 对应上拉刷新
     builder.addCase(getHotSingerList.fulfilled, (state, { payload }) => {
       state.singerList = payload;
       state.enterLoading = false;
       state.pullDownLoading = false;
     });
+    // 更多 上拉
     builder.addCase(
       refreshMoreHotSingerList.fulfilled,
       (state, { payload }) => {
         state.singerList = payload;
-        state.pullDownLoading = false;
+        state.pullUpLoading = false;
       }
     );
-    // 对应下拉刷新
     builder.addCase(getSingerList.fulfilled, (state, { payload }) => {
       state.singerList = payload;
       state.enterLoading = false;
       state.pullDownLoading = false;
     });
+    // 更多 上拉
     builder.addCase(refreshMoreSingerList.fulfilled, (state, { payload }) => {
       state.singerList = payload;
-      state.pullDownLoading = false;
+      state.pullUpLoading = false;
     });
   },
 });

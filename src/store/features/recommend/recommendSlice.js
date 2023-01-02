@@ -24,7 +24,7 @@ export const recommendSlice = createSlice({
   // 用法1，对ts支持不友好并且可能未来放弃该用法
   // extraReducers: {
   //   [getBannerList.fulfilled](state, { payload }) {
-  //     state.bannerList = payload.banners;
+  //     state.bannerList = payload;
   //   },
   //   [getBannerList.rejected](state, { payload }) {
   //     state.bannerList = [];
@@ -34,10 +34,10 @@ export const recommendSlice = createSlice({
   // ts友好，官方推荐用法
   extraReducers: (builder) => {
     builder.addCase(getBannerList.fulfilled, (state, { payload }) => {
-      state.bannerList = payload.banners;
+      state.bannerList = payload;
     });
     builder.addCase(getRecommendList.fulfilled, (state, { payload }) => {
-      state.recommendList = payload.result;
+      state.recommendList = payload;
       state.enterLoading = false;
     });
   },

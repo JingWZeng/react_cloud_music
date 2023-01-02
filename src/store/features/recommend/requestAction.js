@@ -4,13 +4,18 @@ import {
   getRecommendListRequest,
 } from '../../../api/request';
 
-export const getBannerList = createAsyncThunk('recommend/getBannerList', () => {
-  return getBannerRequest();
-});
+export const getBannerList = createAsyncThunk(
+  'recommend/getBannerList',
+  async () => {
+    const res = await getBannerRequest();
+    return res.banners;
+  }
+);
 
 export const getRecommendList = createAsyncThunk(
   'recommend/getRecommendList',
-  () => {
-    return getRecommendListRequest();
+  async () => {
+    const res = await getRecommendListRequest();
+    return res.result;
   }
 );

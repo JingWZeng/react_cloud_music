@@ -14,3 +14,17 @@ export const getCount = (count) => {
     return floor(count / YI) / 10 + '亿';
   }
 };
+
+// 防抖函数
+export const debounce = (func, delay) => {
+  let timer;
+  return function (...args) {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      func.apply(this, args);
+      clearTimeout(timer);
+    }, delay);
+  };
+};
