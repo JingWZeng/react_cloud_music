@@ -13,6 +13,66 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+// type
+// -1:全部
+// 1:男歌手
+// 2:女歌手
+// 3:乐队
+
+// area
+// -1:全部
+// 7华语
+// 96欧美
+// 8:日本
+// 16韩国
+// 0:其他
+
+export const singerTypes = [
+  {
+    name: '全部',
+    key: '-1',
+  },
+  {
+    name: '男歌手',
+    key: '1',
+  },
+  {
+    name: '女歌手',
+    key: '2',
+  },
+  {
+    name: '乐队',
+    key: '3',
+  },
+];
+
+export const singerAreaTypes = [
+  {
+    name: '全部',
+    key: '-1',
+  },
+  {
+    name: '华语',
+    key: '7',
+  },
+  {
+    name: '欧美',
+    key: '96',
+  },
+  {
+    name: '日本',
+    key: '8',
+  },
+  {
+    name: '韩国',
+    key: '16',
+  },
+  {
+    name: '其他',
+    key: '0',
+  },
+];
+
 // 歌手种类
 export const categoryTypes = [
   {

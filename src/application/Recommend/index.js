@@ -9,7 +9,7 @@ import Scroll from '../../baseUI/scroll';
 import {
   getBannerList,
   getRecommendList,
-} from '../../store/features/recommend/recommendSlice';
+} from '../../store/features/recommend/requestAction';
 
 import { Content } from './style';
 import Loading from '../../baseUI/loading';

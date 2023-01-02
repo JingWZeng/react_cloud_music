@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { forEach, map } from 'lodash';
+import { forEach, map, head } from 'lodash';
 import styled from 'styled-components';
 
 import style from '../../assets/global-style';
@@ -38,18 +38,19 @@ const ListItem = styled.span`
 function HorizontalItem(props) {
   const { list, currValue, title } = props;
   const { onClick } = props;
-
   const categoryRef = useRef(null);
 
   useEffect(() => {
     // Scroll滚动的条件是内部宽度大于外部容器宽度
     const categoryDom = categoryRef.current;
     const tagElems = categoryDom.querySelectorAll('span');
+    const tagElemsArray = Array.from(tagElems);
     let totalWidth = 0;
-    forEach(Array.from(tagElems), (elem) => {
+    const firstOffsetWidth = head(tagElemsArray).offsetWidth;
+    forEach(tagElemsArray, (elem) => {
       totalWidth += elem.offsetWidth;
     });
-    categoryDom.style.width = `${totalWidth}px`;
+    categoryDom.style.width = `${totalWidth + firstOffsetWidth}px`;
   }, []);
 
   return (

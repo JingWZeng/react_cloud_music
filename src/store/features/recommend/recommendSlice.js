@@ -1,8 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  getBannerRequest,
-  getRecommendListRequest,
-} from '../../../api/request';
+import { getBannerList, getRecommendList } from './requestAction';
 
 const initialState = {
   bannerList: [],
@@ -24,30 +21,29 @@ export const recommendSlice = createSlice({
       state.enterLoading = payload;
     },
   },
+  // 用法1，对ts支持不友好并且可能未来放弃该用法
+  // extraReducers: {
+  //   [getBannerList.fulfilled](state, { payload }) {
+  //     state.bannerList = payload.banners;
+  //   },
+  //   [getBannerList.rejected](state, { payload }) {
+  //     state.bannerList = [];
+  //   },
+  // },
+
+  // ts友好，官方推荐用法
+  extraReducers: (builder) => {
+    builder.addCase(getBannerList.fulfilled, (state, { payload }) => {
+      state.bannerList = payload.banners;
+    });
+    builder.addCase(getRecommendList.fulfilled, (state, { payload }) => {
+      state.recommendList = payload.result;
+      state.enterLoading = false;
+    });
+  },
 });
 
 export const { changeBannerList, changeRecommendList, changeEnterLoading } =
   recommendSlice.actions;
-
-export const getBannerList = () => (dispatch) => {
-  getBannerRequest()
-    .then((data) => {
-      dispatch(changeBannerList(data.banners));
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-
-export const getRecommendList = () => (dispatch) => {
-  getRecommendListRequest()
-    .then((data) => {
-      dispatch(changeRecommendList(data.result));
-      dispatch(changeEnterLoading(false));
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
 
 export default recommendSlice.reducer;
