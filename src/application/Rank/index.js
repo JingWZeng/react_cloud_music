@@ -3,6 +3,7 @@ import { useMount } from 'ahooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { map } from 'lodash';
 import styled from 'styled-components';
+import { nanoid } from 'nanoid';
 
 import { getRankList } from '../../store/features/rank/requestAction';
 import { filterIndex, filterIdx } from '../../api/utils';
@@ -49,7 +50,7 @@ function Rank(props) {
         {map(list, (item) => {
           return (
             <ListItem
-              key={item.coverImgId}
+              key={nanoid()}
               tracks={item.tracks}
               onClick={() => enterDetail(item.name)}
             >
@@ -65,7 +66,6 @@ function Rank(props) {
       </List>
     );
   };
-
   const renderSongList = (list) => {
     return list.length ? (
       <SongList>
