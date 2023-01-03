@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { forceCheck } from 'react-lazyload';
+import { Outlet } from 'react-router-dom';
 
 import Slider from '../../components/slider';
 import RecommendList from '../../components/list';
@@ -38,6 +39,7 @@ function Recommend(props) {
         </div>
       </Scroll>
       {enterLoading ? <Loading /> : null}
+      <Outlet />
     </Content>
   );
 }
