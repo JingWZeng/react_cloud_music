@@ -1,4 +1,4 @@
-import { floor } from 'lodash';
+import { floor, map, join } from 'lodash';
 import { RankTypes } from './config';
 
 const WAN = 10000;
@@ -45,4 +45,10 @@ export const filterIdx = (name) => {
     if (RankTypes[key] === name) return key;
   }
   return null;
+};
+
+export const getName = (lists) => {
+  const nameList = map(lists, (item) => item.name);
+  const result = join(nameList, '/');
+  return result;
 };

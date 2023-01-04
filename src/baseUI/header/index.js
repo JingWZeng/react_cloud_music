@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -26,24 +26,32 @@ const HeaderContainer = styled.div`
   }
 `;
 
-const Header = (props) => {
-  const { onClick, title } = props;
+const Header = forwardRef((props, ref) => {
+  const { onClick, title, isMarquee } = props;
   return (
-    <HeaderContainer onClick={onClick}>
+    <HeaderContainer onClick={onClick} ref={ref}>
       <i className="iconfont back">&#xe655;</i>
-      <h1>{title}</h1>
+      {isMarquee ? (
+        <marquee>
+          <h1>{title}</h1>
+        </marquee>
+      ) : (
+        <h1>{title}</h1>
+      )}
     </HeaderContainer>
   );
-};
+});
 
 Header.defaultProps = {
   onClick: () => {},
   title: '标题',
+  isMarquee: false,
 };
 
 Header.propTypes = {
   onClick: PropTypes.func,
   title: PropTypes.string,
+  isMarquee: PropTypes.bool,
 };
 
 export default React.memo(Header);
