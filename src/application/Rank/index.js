@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { map } from 'lodash';
 import styled from 'styled-components';
 import { nanoid } from 'nanoid';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 import { getRankList } from '../../store/features/rank/requestAction';
 import { filterIndex, filterIdx } from '../../api/utils';
@@ -26,6 +27,7 @@ export const EnterLoading = styled.div`
 function Rank(props) {
   const { loading, rankList } = useSelector((state) => state.rank);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useMount(() => {
     if (!rankList.length) {
@@ -37,11 +39,8 @@ function Rank(props) {
   const officialList = rankList.slice(0, globalStartIndex);
   const globalList = rankList.slice(globalStartIndex);
 
-  const enterDetail = (name) => {
-    const idx = filterIdx(name);
-    if (idx === null) {
-      alert('暂无相关数据');
-    }
+  const enterDetail = (detail) => {
+    navigate(`/rank/${detail.id}`);
   };
 
   const renderRankList = (list, global) => {
@@ -52,7 +51,7 @@ function Rank(props) {
             <ListItem
               key={nanoid()}
               tracks={item.tracks}
-              onClick={() => enterDetail(item.name)}
+              onClick={() => enterDetail(item)}
             >
               <div className="img_wrapper">
                 <img src={item.coverImgUrl} alt="" />
@@ -103,6 +102,7 @@ function Rank(props) {
           ) : null}
         </div>
       </Scroll>
+      <Outlet />
     </Container>
   );
 }

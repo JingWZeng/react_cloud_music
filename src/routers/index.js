@@ -34,6 +34,12 @@ export default [
       {
         path: 'rank',
         element: <Rank />,
+        children: [
+          {
+            path: '/rank/:id',
+            element: <Album />,
+          },
+        ],
       },
     ],
   },
