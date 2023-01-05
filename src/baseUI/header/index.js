@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import Marquee from 'react-fast-marquee';
 
 import style from '../../assets/global-style';
 
@@ -32,9 +33,9 @@ const Header = forwardRef((props, ref) => {
     <HeaderContainer onClick={onClick} ref={ref}>
       <i className="iconfont back">&#xe655;</i>
       {isMarquee ? (
-        <marquee>
+        <Marquee gradient={false}>
           <h1>{title}</h1>
-        </marquee>
+        </Marquee>
       ) : (
         <h1>{title}</h1>
       )}
@@ -54,4 +55,4 @@ Header.propTypes = {
   isMarquee: PropTypes.bool,
 };
 
-export default React.memo(Header);
+export default Header;
