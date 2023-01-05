@@ -12,7 +12,6 @@ export const albumSlice = createSlice({
   reducers: {
     changeCurrentAlbum(state, { payload }) {
       state.currentAlbum = payload;
-      state.enterLoading = false;
     },
     changeEnterLoading(state, { payload }) {
       state.enterLoading = payload;

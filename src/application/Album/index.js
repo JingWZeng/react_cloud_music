@@ -11,6 +11,10 @@ import { getAlbumDetail } from '../../store/features/album/requestAction';
 import Loading from '../../baseUI/loading';
 
 import style from '../../assets/global-style';
+import {
+  changeCurrentAlbum,
+  changeEnterLoading,
+} from '../../store/features/album/albumSlice';
 
 export const HEADER_HEIGHT = 45;
 
@@ -26,6 +30,8 @@ function Album(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(changeEnterLoading(true));
+    dispatch(changeCurrentAlbum({}));
     dispatch(getAlbumDetail(id));
   }, [id]);
 
