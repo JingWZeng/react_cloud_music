@@ -4,6 +4,7 @@ import { map } from 'lodash';
 import LazyLoad, { forceCheck } from 'react-lazyload';
 import { useDispatch, useSelector } from 'react-redux';
 import { useUpdateEffect } from 'ahooks';
+import { useNavigate, Outlet } from 'react-router-dom';
 
 import { alphaTypes, singerTypes, singerAreaTypes } from '../../api/config';
 import { NavContainer, ListContainer, List, ListItem } from './style';
@@ -28,6 +29,7 @@ function Singers(props) {
   const [alpha, setAlpha] = useState('');
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     pageCount,
@@ -120,12 +122,19 @@ function Singers(props) {
     }
   };
 
+  const enterDetail = (id) => {
+    navigate(`/singers/${id}`);
+  };
+
   const renderSingerList = () => {
     return (
       <List>
         {map(singerList, (singer, index) => {
           return (
-            <ListItem key={singer.accountId + '' + index}>
+            <ListItem
+              key={singer.accountId + '' + index}
+              onClick={() => enterDetail(singer.id)}
+            >
               <div className="img_wrapper">
                 <LazyLoad
                   placeholder={
@@ -187,6 +196,7 @@ function Singers(props) {
           {renderSingerList()}
         </Scroll>
       </ListContainer>
+      <Outlet />
     </>
   );
 }
