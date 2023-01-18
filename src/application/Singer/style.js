@@ -40,7 +40,7 @@ export const ImgWrapper = styled.div`
   height: 0;
   padding-top: 75%;
   transform-origin: top;
-  background-image: url (${(props) => props.bgUrl});
+  background-image: url(${(props) => props.bgUrl});
   background-size: cover;
   z-index: 50;
 
@@ -50,7 +50,7 @@ export const ImgWrapper = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba (7, 17, 27, 0.3);
+    background-color: rgba (7, 17, 27, 0.3);
   }
 `;
 
