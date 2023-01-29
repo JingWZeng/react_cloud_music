@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 
 import { Top, Tab, TabItem } from './style';
+import Player from '../Player';
 
 function Home(props) {
   const activeStyle = {
@@ -42,6 +43,7 @@ function Home(props) {
         </NavLink>
       </Tab>
       <Outlet />
+      <Player />
     </>
   );
 }

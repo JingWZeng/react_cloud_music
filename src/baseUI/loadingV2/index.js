@@ -4,11 +4,11 @@ import style from '../../assets/global-style';
 
 const dance = keyframes`
   0%, 40%, 100% {
-    transform: scaleY (0.4);
+    transform: scaleY(0.4);
     transform-origin: center 100%;
   }
   20% {
-    transform: scaleY (1);
+    transform: scaleY(1);
   }
 `;
 const Loading = styled.div`

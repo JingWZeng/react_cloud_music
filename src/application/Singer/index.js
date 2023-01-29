@@ -82,7 +82,7 @@ function Singer(props) {
     if (newY > 0) {
       // 往下拉
       imageElem.style.transform = `scale(${1 + percent})`;
-      buttonElem.style.transform = `translate3d (0, ${newY}px, 0)`;
+      buttonElem.style.transform = `translate3d(0,${newY}px, 0)`;
       layerElem.style.top = `${imageHeight - OFFSET + newY}px`;
     } else if (newY >= minScrollY) {
       // 往上滑动，但是遮罩还没超过 Header 部分
@@ -93,7 +93,7 @@ function Singer(props) {
       imageElem.style.height = 0;
       imageElem.style.zIndex = -1;
       // 按钮跟着移动且渐渐变透明
-      buttonElem.style.transform = `translate3d (0, ${newY}px, 0)`;
+      buttonElem.style.transform = `translate3d(0,${newY}px, 0)`;
       buttonElem.style.opacity = `${1 - percent * 2}`;
     } else if (newY < minScrollY) {
       // 往上滑动，但是遮罩超过 Header 部分
