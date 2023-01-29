@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { CSSTransition } from 'react-transition-group';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Header from '../../baseUI/header';
 import {
@@ -13,6 +14,13 @@ import {
 import Scroll from '../../baseUI/scroll';
 import SongsList from '../SongList';
 import { HEADER_HEIGHT } from '../Album';
+import { getSingerInfo } from '../../store/features/singer/requestAction';
+import Loading from '../../baseUI/loading';
+import {
+  changeArtist,
+  changeLoading,
+  changeSongsOfArtist,
+} from '../../store/features/singer/singerSlice';
 
 // 往上偏移的尺寸，露出圆角
 const OFFSET = 5;
@@ -20,6 +28,11 @@ const OFFSET = 5;
 function Singer(props) {
   const [showStatus, setShowStatus] = useState(true);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const { artist, songsOfArtist, loading } = useSelector(
+    (state) => state.singer
+  );
 
   const collectButton = useRef();
   const imageWrapper = useRef();
@@ -40,99 +53,16 @@ function Singer(props) {
     songScroll.current.refresh();
   }, []);
 
-  const artist = {
-    picUrl:
-      'https://p2.music.126.net/W__FCWFiyq0JdPtuLJoZVQ==/109951163765026271.jpg',
-    name: '薛之谦',
-    hotSongs: [
-      {
-        name: '我好像在哪见过你',
-        ar: [{ name: '薛之谦' }],
-        al: {
-          name: '薛之谦专辑',
-        },
-      },
-      {
-        name: '我好像在哪见过你',
-        ar: [{ name: '薛之谦' }],
-        al: {
-          name: '薛之谦专辑',
-        },
-      },
-      {
-        name: '我好像在哪见过你',
-        ar: [{ name: '薛之谦' }],
-        al: {
-          name: '薛之谦专辑',
-        },
-      },
-      {
-        name: '我好像在哪见过你',
-        ar: [{ name: '薛之谦' }],
-        al: {
-          name: '薛之谦专辑',
-        },
-      },
-      {
-        name: '我好像在哪见过你',
-        ar: [{ name: '薛之谦' }],
-        al: {
-          name: '薛之谦专辑',
-        },
-      },
-      {
-        name: '我好像在哪见过你',
-        ar: [{ name: '薛之谦' }],
-        al: {
-          name: '薛之谦专辑',
-        },
-      },
-      {
-        name: '我好像在哪见过你',
-        ar: [{ name: '薛之谦' }],
-        al: {
-          name: '薛之谦专辑',
-        },
-      },
-      {
-        name: '我好像在哪见过你',
-        ar: [{ name: '薛之谦' }],
-        al: {
-          name: '薛之谦专辑',
-        },
-      },
-      {
-        name: '我好像在哪见过你',
-        ar: [{ name: '薛之谦' }],
-        al: {
-          name: '薛之谦专辑',
-        },
-      },
-      {
-        name: '我好像在哪见过你',
-        ar: [{ name: '薛之谦' }],
-        al: {
-          name: '薛之谦专辑',
-        },
-      },
-      {
-        name: '我好像在哪见过你',
-        ar: [{ name: '薛之谦' }],
-        al: {
-          name: '薛之谦专辑',
-        },
-      },
-      {
-        name: '我好像在哪见过你',
-        ar: [{ name: '薛之谦' }],
-        al: {
-          name: '薛之谦专辑',
-        },
-      },
-
-      // 省略 20 条
-    ],
-  };
+  useEffect(() => {
+    dispatch(changeArtist([]));
+    dispatch(changeSongsOfArtist([]));
+    dispatch(changeLoading(true));
+    dispatch(
+      getSingerInfo({
+        id,
+      })
+    );
+  }, []);
 
   const handleOnExited = () => {
     navigate('/singers');
@@ -203,9 +133,10 @@ function Singer(props) {
         <BgLayer ref={layer}></BgLayer>
         <SongListWrapper ref={songScrollWrapper}>
           <Scroll ref={songScroll} onScroll={handleScroll}>
-            <SongsList songs={artist.hotSongs} showCollect={false}></SongsList>
+            <SongsList songs={songsOfArtist} showCollect={false}></SongsList>
           </Scroll>
         </SongListWrapper>
+        {loading ? <Loading /> : null}
       </Container>
     </CSSTransition>
   );
