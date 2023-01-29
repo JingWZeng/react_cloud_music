@@ -11,7 +11,9 @@ import {
   Bottom,
   Operators,
   CDWrapper,
+  ProgressWrapper,
 } from './style';
+import ProgressBar from '../../../baseUI/processBar';
 
 const transform = prefixStyle('transform');
 
@@ -54,24 +56,6 @@ function NormalPlayer(props) {
     cdWrapperDom.style.animation = '';
   };
 
-  // 获取 miniPlayer 图片中心相对 normalPlayer 唱片中心的偏移
-  const _getPosAndScale = () => {
-    const targetWidth = 40;
-    const paddingLeft = 40;
-    const paddingBottom = 30;
-    const paddingTop = 80;
-    const width = window.innerWidth * 0.8;
-    const scale = targetWidth / width;
-    // 两个圆心的横坐标距离和纵坐标距离
-    const x = -(window.innerWidth / 2 - paddingLeft);
-    const y = window.innerHeight - paddingTop - width / 2 - paddingBottom;
-    return {
-      x,
-      y,
-      scale,
-    };
-  };
-
   const leave = () => {
     const cdWrapperDom = cdWrapperRef.current;
     if (!cdWrapperDom) return;
@@ -90,6 +74,24 @@ function NormalPlayer(props) {
     // 一定要注意现在要把 normalPlayer 这个 DOM 给隐藏掉，因为 CSSTransition 的工作只是把动画执行一遍
     // 不置为 none 现在全屏播放器页面还是存在
     normalPlayerRef.current.style.display = 'none';
+  };
+
+  // 获取 miniPlayer 图片中心相对 normalPlayer 唱片中心的偏移
+  const _getPosAndScale = () => {
+    const targetWidth = 40;
+    const paddingLeft = 40;
+    const paddingBottom = 30;
+    const paddingTop = 80;
+    const width = window.innerWidth * 0.8;
+    const scale = targetWidth / width;
+    // 两个圆心的横坐标距离和纵坐标距离
+    const x = -(window.innerWidth / 2 - paddingLeft);
+    const y = window.innerHeight - paddingTop - width / 2 - paddingBottom;
+    return {
+      x,
+      y,
+      scale,
+    };
   };
 
   return (
@@ -135,6 +137,13 @@ function NormalPlayer(props) {
         </Middle>
 
         <Bottom className="bottom">
+          <ProgressWrapper>
+            <span className="time time-l">0:00</span>
+            <div className="progress-bar-wrapper">
+              <ProgressBar percent={0.2}></ProgressBar>
+            </div>
+            <div className="time time-r">4:17</div>
+          </ProgressWrapper>
           <Operators>
             <div className="icon i-left">
               <i className="iconfont">&#xe625;</i>
