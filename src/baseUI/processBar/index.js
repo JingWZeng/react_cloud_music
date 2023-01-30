@@ -4,7 +4,7 @@ import style from '../../assets/global-style';
 import { prefixStyle } from './../../api/utils';
 import { head, max, min } from 'lodash';
 
-const progressBtnWidth = 16;
+const progressBtnWidth = 8;
 
 const ProgressBarWrapper = styled.div`
   height: 30px;
@@ -44,6 +44,7 @@ const ProgressBarWrapper = styled.div`
 `;
 
 function ProgressBar(props) {
+  const { onPercentChange } = props;
   const progressBarRef = useRef();
   const progressRef = useRef();
   const progressBtnRef = useRef();
@@ -60,15 +61,15 @@ function ProgressBar(props) {
   const progressTouchMove = (e) => {
     if (!touch.initiated) return;
     const deltaX = head(e?.touches).pageX - touch.startX;
-    const barWidth = progressBarRef.current.clientWidth;
+    const barWidth = progressBarRef.current.clientWidth - progressBtnWidth;
     const offsetWidth = min([max([0, touch.left + deltaX]), barWidth]);
-    console.log(offsetWidth);
     _offset(offsetWidth);
+    _changePercent();
   };
 
   const progressTouchEnd = () => {
     const endTouch = JSON.parse(JSON.stringify(touch));
-    endTouch.initiated = false;
+    endTouch.initiated = false; // 滑动结束
     setTouch(endTouch);
   };
 
@@ -78,16 +79,33 @@ function ProgressBar(props) {
     progressBtnRef.current.style.transform = `translate3d(${offsetWidth}px, 0, 0)`;
   };
 
+  const handleClickProcess = (e) => {
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const offsetWidth = e.pageX - rect.left;
+    _offset(offsetWidth);
+    _changePercent();
+  };
+
+  const _changePercent = () => {
+    const barWidth = progressBarRef.current.clientWidth - progressBtnWidth;
+    const currentPercent = progressRef.current.clientWidth / barWidth;
+    onPercentChange(currentPercent);
+  };
+
   return (
     <ProgressBarWrapper>
-      <div className="bar-inner" ref={progressBarRef}>
+      <div
+        className="bar-inner"
+        ref={progressBarRef}
+        onClick={handleClickProcess}
+      >
         <div className="progress" ref={progressRef}></div>
         <div
           className="progress-btn-wrapper"
           ref={progressBtnRef}
-          onTouchStart={(e) => progressTouchStart(e)}
-          onTouchMove={(e) => progressTouchMove(e)}
-          onTouchEnd={(e) => progressTouchEnd(e)}
+          onTouchStart={progressTouchStart}
+          onTouchMove={progressTouchMove}
+          onTouchEnd={progressTouchEnd}
         >
           <div className="progress-btn"></div>
         </div>
