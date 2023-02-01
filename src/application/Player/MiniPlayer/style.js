@@ -96,6 +96,7 @@ export const MiniPlayerContainer = styled.div`
       position: absolute;
       left: 8px;
       top: 8px;
+      cursor: pointer;
 
       &.icon-play {
         left: 9px;

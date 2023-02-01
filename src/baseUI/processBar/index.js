@@ -5,6 +5,7 @@ import { prefixStyle } from './../../api/utils';
 import { head, max, min } from 'lodash';
 
 const progressBtnWidth = 8;
+const transform = prefixStyle('transform');
 
 const ProgressBarWrapper = styled.div`
   height: 30px;
@@ -44,11 +45,34 @@ const ProgressBarWrapper = styled.div`
 `;
 
 function ProgressBar(props) {
-  const { onPercentChange } = props;
+  const { percent, onPercentChange } = props;
   const progressBarRef = useRef();
   const progressRef = useRef();
   const progressBtnRef = useRef();
   const [touch, setTouch] = useState({});
+
+  useEffect(() => {
+    if (percent >= 0 && percent <= 1 && !touch.initiated) {
+      const barWidth = progressBarRef.current.clientWidth - progressBtnWidth;
+      const offsetWidth = percent * barWidth;
+      progressRef.current.style.width = `${offsetWidth}px`;
+      progressBtnRef.current.style[
+        transform
+      ] = `translate3d(${offsetWidth}px, 0, 0)`;
+    }
+  }, [percent]);
+
+  // 处理进度条的偏移
+  const _offset = (offsetWidth) => {
+    progressRef.current.style.width = `${offsetWidth}px`;
+    progressBtnRef.current.style.transform = `translate3d(${offsetWidth}px, 0, 0)`;
+  };
+
+  const _changePercent = () => {
+    const barWidth = progressBarRef.current.clientWidth - progressBtnWidth;
+    const currentPercent = progressRef.current.clientWidth / barWidth;
+    onPercentChange(currentPercent);
+  };
 
   const progressTouchStart = (e) => {
     const startTouch = {};
@@ -73,23 +97,11 @@ function ProgressBar(props) {
     setTouch(endTouch);
   };
 
-  // 处理进度条的偏移
-  const _offset = (offsetWidth) => {
-    progressRef.current.style.width = `${offsetWidth}px`;
-    progressBtnRef.current.style.transform = `translate3d(${offsetWidth}px, 0, 0)`;
-  };
-
   const handleClickProcess = (e) => {
     const rect = progressBarRef.current.getBoundingClientRect();
     const offsetWidth = e.pageX - rect.left;
     _offset(offsetWidth);
     _changePercent();
-  };
-
-  const _changePercent = () => {
-    const barWidth = progressBarRef.current.clientWidth - progressBtnWidth;
-    const currentPercent = progressRef.current.clientWidth / barWidth;
-    onPercentChange(currentPercent);
   };
 
   return (

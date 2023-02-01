@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { CSSTransition } from 'react-transition-group';
 import animations from 'create-keyframe-animation';
 
-import { getName, prefixStyle } from '../../../api/utils';
+import { getName, prefixStyle, formatPlayTime } from '../../../api/utils';
 import {
   NormalPlayerContainer,
   Top,
@@ -18,7 +18,19 @@ import ProgressBar from '../../../baseUI/processBar';
 const transform = prefixStyle('transform');
 
 function NormalPlayer(props) {
-  const { song, fullScreen, toggleFullScreen } = props;
+  const {
+    song,
+    fullScreen,
+    playing,
+    percent,
+    currentTime,
+    duration,
+    toggleFullScreen,
+    clickPlaying,
+    onPercentChange,
+    onPrev,
+    onNext,
+  } = props;
   const normalPlayerRef = useRef();
   const cdWrapperRef = useRef();
 
@@ -128,7 +140,7 @@ function NormalPlayer(props) {
           <CDWrapper>
             <div className="cd">
               <img
-                className="image play"
+                className={`image play ${playing ? '' : 'pause'}`}
                 src={song.al.picUrl + '?param=400x400'}
                 alt="音碟"
               />
@@ -138,23 +150,32 @@ function NormalPlayer(props) {
 
         <Bottom className="bottom">
           <ProgressWrapper>
-            <span className="time time-l">0:00</span>
+            <span className="time time-l">{formatPlayTime(currentTime)}</span>
             <div className="progress-bar-wrapper">
-              <ProgressBar percent={0.2}></ProgressBar>
+              <ProgressBar
+                percent={percent}
+                onPercentChange={onPercentChange}
+              ></ProgressBar>
             </div>
-            <div className="time time-r">4:17</div>
+            <div className="time time-r">{formatPlayTime(duration)}</div>
           </ProgressWrapper>
           <Operators>
             <div className="icon i-left">
               <i className="iconfont">&#xe625;</i>
             </div>
-            <div className="icon i-left">
+            <div className="icon i-left" onClick={onPrev}>
               <i className="iconfont">&#xe6e1;</i>
             </div>
             <div className="icon i-center">
-              <i className="iconfont">&#xe723;</i>
+              <i
+                className="iconfont"
+                onClick={(e) => clickPlaying(e, !playing)}
+                dangerouslySetInnerHTML={{
+                  __html: playing ? '&#xe723;' : '&#xe731;',
+                }}
+              ></i>
             </div>
-            <div className="icon i-right">
+            <div className="icon i-right" onClick={onNext}>
               <i className="iconfont">&#xe718;</i>
             </div>
             <div className="icon i-right">
@@ -170,7 +191,15 @@ function NormalPlayer(props) {
 NormalPlayer.propTypes = {
   song: PropTypes.object,
   fullScreen: PropTypes.bool,
+  playing: PropTypes.bool,
+  percent: PropTypes.number,
+  duration: PropTypes.number, // 总时长
+  currentTime: PropTypes.number, // 播放时间
   toggleFullScreen: PropTypes.func,
+  clickPlaying: PropTypes.func,
+  onPercentChange: PropTypes.func,
+  onPrev: PropTypes.func,
+  onNext: PropTypes.func,
 };
 
 export default React.memo(NormalPlayer);

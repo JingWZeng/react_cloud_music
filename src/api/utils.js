@@ -85,3 +85,14 @@ export function prefixStyle(style) {
   }
   return vendor + style.charAt(0).toUpperCase() + style.substr(1);
 }
+
+export const getSongUrl = (id) => {
+  return `https://music.163.com/song/media/outer/url?id=${id}.mp3`;
+};
+
+export const formatPlayTime = (playTime) => {
+  playTime = playTime | 0; // |0 向下取整
+  const minutes = (playTime / 60) | 0;
+  const seconds = (playTime % 60).toString().padStart(2, '0'); // 4 ---> 04
+  return `${minutes}:${seconds}`;
+};
